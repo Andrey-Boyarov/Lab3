@@ -73,7 +73,6 @@ def start_exec(t, n, a, beta, c):
     print(f"Calls number:{len(t_array)}\nDurations number:{len(d_array)}")
     print("Calls starts:", t_array, '\nDurations:', d_array)
     matrix = np.zeros((N, math.ceil(T / 0.1)), dtype=float)
-    points_matrix = np.zeros((N, math.ceil(T / 0.1)), dtype=float)
     number = 0
     k = 0
     for i in range(len(t_array)):
@@ -119,12 +118,10 @@ def start_exec(t, n, a, beta, c):
                         t += 1
             print(
                 f" Call:{k}\n\tChannel{number + 1}|Start:{start_index}|End:{end_index}|Duration:{end_of_call}|Efficiency:{k / (k + declined)}")
-            points_matrix[number][start_index] = number + 1
             ef = k / (k + declined)
             efficiency.set(str(ef))
             disp_count.set(str(k))
             rejected.set((str(declined)))
-            points_matrix[number][end_index] = number + 1
     print(f"Declined: {declined}")
     busy_lines = get_busy_line(matrix)
     busy.set(str(busy_lines))
@@ -136,13 +133,9 @@ def start_exec(t, n, a, beta, c):
                 matrix[i][j] = float('nan')
             else:
                 matrix[i][j] = (i + 1)
-            if points_matrix[i][j] == 0:
-                points_matrix[i][j] = float('nan')
 
     for i in range(np.shape(matrix)[0]):
-        plt.plot(plot_array, matrix[i][:], c='red')
-        plt.scatter(plot_array, points_matrix[i][:], 10,
-                    c='red')
+        plt.plot(plot_array, matrix[i][:], c='black')
 
     plt.xlabel("Время")
     plt.grid()
